@@ -15,7 +15,6 @@ router.get('/', (req, res)=>{
     });
 });
 
-
 router.get('/slug/:slug', (req, res)=>{
     model.findOne({ _id:req.params.slug}, (err, formsdata)=>{
         if(err){console.log(err);}
@@ -24,6 +23,33 @@ router.get('/slug/:slug', (req, res)=>{
             formsdata: formsdata
         });
 
+    });
+});
+
+router.get('/form/:slug', (req, res)=>{
+    model.findOne({ _id:req.params.slug}, (err, formsdata)=>{
+        if(err){console.log(err);}
+		if(formsdata){
+        res.render('form', {
+            title: 'Form',
+            formsdata: JSON.parse(formsdata.structure),
+			form_id:formsdata._id,
+			access:formsdata.status,
+			form_name:formsdata.name
+        });
+		} else{ res.redirect('/'); }
+    });
+});
+
+router.get('/report/:slug', (req, res)=>{
+    model.findOne({ _id:req.params.slug}, (err, formsdata)=>{
+        if(err){console.log(err);}
+		if(formsdata){
+        res.render('report', {
+            title: 'Report',
+            formsdata: formsdata
+        });
+		} else{ res.redirect('/'); }
     });
 });
 
@@ -69,6 +95,33 @@ router.post('/formsdata', async (req, res)=>{
         return res.status(200).json("Deleted ").end();
 		});
 	}	
+	
+	
+	// Form tasks //
+	if(req.body.swtch == 'update_form'){
+    model.updateOne({_id:req.body.uid},{structure:req.body.data_schema,primary_key:req.body.primary_key}, (err, formsdata)=>{ 
+        if(err){console.log(err);}
+        return res.status(200).json("Updated").end()
+	})
+	}	
+	
+	if(req.body.swtch == 'getSlug'){
+		model.findById(req.body.id, (err, formsdata)=>{
+        if(err){console.log(err);} console.log(formsdata);
+        return res.status(200).json(formsdata).end() });
+	
+	}	
+	
+	if(req.body.swtch == 'public_submit'){
+	//delete req.body.swtch,req.body.form_id; 	
+    model.updateOne({ _id:req.body.form_id },{ $push: { data: req.body.form_data } }, (err)=>{
+    if(err){console.log(err);}
+    return res.status(200).json("added").end()
+    })
+	
+	}	
+	
+	
 	
 });
 

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= title %></title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet" >
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+</head>
+<body>
+
+    <div class="container">
+	<div class = "col-md-12 p-3 text-center">
+	<div class = "row">
+	<strong class = "col-md-12" ><%-form_name%></strong>
+								<div class="contact-wrap">
+                                        <div class = "d-none" id = "data_form_form_id" data-value = "<%-form_id%>" ></div>
+									<form action = "#" method="POST" id="contactForm" name="contactForm" class="contactForm bg-secondary border rounded p-5 mb-3">
+										<div class="row text-white">
+											<% if(formsdata && access == true) { %>
+											<% for(var i=0; i < formsdata.length; i++) { %>
+											<%  if(formsdata[i].type == "text") { %>
+											<div class="col-md-12">
+											<div class="col-md-12">
+											<label class = "col-md-6 col-xs-12" for="<%-formsdata[i].name%>"><%-formsdata[i].name%></label>
+											</div>											
+											<div class="form-group">
+											<%  if(formsdata[i].required == "true")  { %>
+											<input type="text" class="form-control ml-3"  required name = "<%-formsdata[i].id%>" id = <%-formsdata[i].id%> placeholder= "<%-formsdata[i].placeholder%>" />
+											<% } else { %>
+											<input type="text" class="form-control ml-3" name = "<%-formsdata[i].id%>" id = <%-formsdata[i].id%> placeholder= "<%-formsdata[i].placeholder%>" /> 
+											<% } %>
+											</div>
+											</div>
+											<% } %>
+											
+											<%  if(formsdata[i].type == "date") { %>
+											<div class="col-md-12">
+											<div class="col-md-12">
+											<label class = "col-md-6 col-xs-12" for="<%-formsdata[i].name%>"><%-formsdata[i].name%></label>
+											</div>											
+											<div class="form-group">
+											<%  if(formsdata[i].required == "true")  { %>
+											<input type="text" class="form-control ml-3 datetimepicker"  required name = "<%-formsdata[i].id%>" placeholder= "<%-formsdata[i].placeholder%>" />
+											<% } else { %>
+											<input type="text" class="form-control ml-3 datetimepicker"  name = "<%-formsdata[i].id%>"  placeholder= "<%-formsdata[i].placeholder%>" /> 
+											<% } %>
+											</div>
+											</div>
+											<% } %>
+											
+											<%  if(formsdata[i].type == "file") { %>
+											<div class="col-md-12">
+											<div class="col-md-12">
+											<label class = "col-md-6 col-xs-12" for="<%-formsdata[i].name%>"><%-formsdata[i].name%></label>
+											</div>											
+											<div class="form-group">
+											<%  if(formsdata[i].required == "true")  { %>
+											<input type="file" required class="form-control ml-3" name = "<%-formsdata[i].id%>" id = <%-formsdata[i].id%> />
+											<% } else { %>
+											<input type="file" class="form-control ml-3" name = "<%-formsdata[i].id%>" id = <%-formsdata[i].id%> />  
+											<% } %>
+											</div>
+											</div>											
+											<% } %>
+											<%  if(formsdata[i].type == "number") { %>
+											<div class="col-md-12">
+											<div class="col-md-12">
+											<label class = "col-md-6 col-xs-12" for="<%-formsdata[i].name%>"><%-formsdata[i].name%></label>
+											</div>											
+											<div class="form-group">
+											<%  if(formsdata[i].required == "true")  { %>
+											<input type="number" required class="form-control ml-3" name = "<%-formsdata[i].id%>" id = <%-formsdata[i].id%> placeholder= "<%-formsdata[i].placeholder%>" />
+											<% } else { %>
+											<input type="number" class="form-control ml-3" name = "<%-formsdata[i].id%>" id = <%-formsdata[i].id%> placeholder= "<%-formsdata[i].placeholder%>" /> 
+											<% } %>
+											</div>
+											</div>
+											<% } %>
+											<%  if(formsdata[i].type == "email") { %>
+											<div class="col-md-12">
+											<div class="col-md-12">
+											<label class = "col-md-6 col-xs-12" for="<%-formsdata[i].name%>"><%-formsdata[i].name%></label>
+											</div>											
+											<div class="form-group">
+											<%  if(formsdata[i].required == "true")  { %>
+											<input type="email" required class="form-control ml-3" name = "<%-formsdata[i].id%>" id = <%-formsdata[i].id%> placeholder= "<%-formsdata[i].placeholder%>" />
+											<% } else { %>
+                                            <input type="email" class="form-control ml-3" name = "<%-formsdata[i].id%>" id = <%-formsdata[i].id%> placeholder= "<%-formsdata[i].placeholder%>" />											    
+											<% } %>
+											</div>
+											</div>
+											<% } %>
+											<%  if(formsdata[i].type == "text_area") { %>
+											<div class="col-md-12">
+											<div class="col-md-12">
+											<label class = "col-md-6 col-xs-12" for="<%-formsdata[i].name%>"><%-formsdata[i].name%></label>
+											</div>
+											<div class="form-group">
+											<%  if(formsdata[i].required == "true")  { %>
+											<textarea required name = "<%-formsdata[i].id%>" class="form-control ml-3" id = <%-formsdata[i].id%> cols="30" rows="8" placeholder= "<%-formsdata[i].placeholder%>" ></textarea>
+											<% } else { %>
+                                            <textarea name = "<%-formsdata[i].id%>" class="form-control ml-3" id = <%-formsdata[i].id%> cols="30" rows="8" placeholder= "<%-formsdata[i].placeholder%>" ></textarea>											    
+											<% } %>
+											</div>
+											</div>
+											<% } %>	
+											<%  if(formsdata[i].type == "option") { %>
+											<div class="col-md-12">
+											<div class="col-md-12">
+											<label class = "col-md-6 col-xs-12" for="<%-formsdata[i].name%>"><%-formsdata[i].name%></label>
+											</div>
+											<div class="form-group">
+											<%  if(formsdata[i].required == "true")  { %>
+											<select required name = "<%-formsdata[i].id%>" class="form-control ml-3" id = <%-formsdata[i].id%> cols="30" rows="8" placeholder= "<%-formsdata[i].placeholder%>" >
+											<% } else { %>
+											<select name = "<%-formsdata[i].id%>" class="form-control ml-3" id = <%-formsdata[i].id%> cols="30" rows="8" placeholder= "<%-formsdata[i].placeholder%>" >    
+											<% } %>
+                                            <option class = 'form-control btn btn-sm btn-primary p-2 mt-1 border' value ''>SELECT</option>                                                
+												<% for(var j=0; j < formsdata[i].data.length; j++) { %>
+                                                <option class = 'form-control btn btn-sm p-2 mt-1 border' value = "<%-formsdata[i].data[j]%>" ><%-formsdata[i].data[j]%></option>
+                                                <% } %>
+                                                
+											</select>
+											
+											</div>
+											</div>
+											<% } %>											
+											
+											<% } %>	<!-- main for loop end-->
+											<div class="col-md-12 text-center">
+												<div class="form-group">
+													<input type="submit" value="Submit" class="col-6 btn btn-outline-light form_submit_btn mt-3 p-3">
+													<div class="submitting"></div>
+												</div>
+											</div>											
+											<% } else { %>
+											<p>Build and save form and give status true</p>
+											<% } %>
+											<!--
+											<div class="col-md-12">
+												<div class="form-group">
+													<textarea name="message" class="form-control" id="message" cols="30" rows="8" placeholder="Message"></textarea>
+												</div>
+											</div>
+											-->
+										
+										</div>
+									</form>
+								</div>
+
+    </div>
+    
+	
+	
+
+<!-- Modal delete formsdata-->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog border border-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title" ></h5>
+		<input hidden id = "selected_node" value = "" >
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+	  
+	<div class="modal-body p-5">
+	<h3 class = "text-danger" >ARE YOU SURE YOU WANT TO DELETE</h3>
+
+	</div>
+  
+      <div class="modal-footer">
+		<button type="submit" class="btn btn-sm btn-outline-danger confirm_delete" data-dismiss="modal">DELETE</button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal" >Close</button>
+      </div>
+	  
+    </div>
+  </div>
+</div>	
+		
+	
+	
+	
+	
+</body>
+<script src="../js/bootstrap.bundle.min.js" ></script>
+<script src="../js/jquery.js" ></script>
+<script src="../js/jquery-ui.js"></script>
+<script>
+$(document).ready(function(){ 
+let data_url = `/formsdata`;
+            $("#contactForm").submit(function(e) {
+            e.preventDefault();
+            $('.form_submit_btn').prop('disabled', true);
+            console.log($("#contactForm").serialize());
+            actionurl = data_url;
+            $.ajax({
+            url: actionurl,
+            type: 'post',
+            data: {
+            form_data : JSON.stringify($("#contactForm").serializeArray()),
+            form_id : $("#data_form_form_id").data('value'),
+			swtch:"public_submit"
+            },
+            success: function(data) {
+			alert("updated");
+            $('#contactForm')[0].reset();
+            $('.form_submit_btn').prop('disabled', false);
+            }
+            });
+            });    
+            
+            $(".datetimepicker").keydown(function(e) {
+            return false;
+            });
+});
+</script>
+</html>

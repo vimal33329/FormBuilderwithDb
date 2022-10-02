@@ -17,7 +17,11 @@
 				<div class="container">
 				<div class="row">
 				<div class="col-12 text-center p-3 bg-dark">
-				  <h2 id = "form_get_id"  ><%= formsdata.name %> </h2> 
+		<h2 id = "form_get_id"  data-id = <%= formsdata._id %> ><%= formsdata.name %> </h2> 
+		<a href="../" class="btn btn-sm btn-outline-success text-light float-left ml-5">BACK TO FORM</a>
+		<a target = '_blank' href="../form/<%= formsdata._id %>" class="btn btn-sm btn-outline-success float-left ml-5">FORM LIVE URL</a>
+		<button type="button" class="btn btn-sm btn-outline-success float-right ml-2 form_save" >SAVE FORM</button>
+		<button type="button" class="btn btn-sm btn-outline-success float-right ml-2 refresh_form" >REFRESH FORM</button>
 				  
 				</div>
 				<div class="col-3 bg-dark text-center">
@@ -52,29 +56,27 @@
 	
 	
 
-<!-- Modal delete formsdata-->
-<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog"  aria-hidden="true">
-  <div class="modal-dialog border border-danger" role="document">
+<!-- Button trigger modal -->
+<!-- Modal 12345-->
+<!-- <div class="modal fade" id="option_model" tabindex="-1" role="dialog" aria-labelledby="option_model" aria-hidden="true"> -->
+<div class="modal fade" id="option_model" tabindex="-1" role="dialog"  aria-hidden="true">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header bg-danger">
-        <h5 class="modal-title" ></h5>
-		<input hidden id = "selected_node" value = "" >
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header">
+        <h5 class="modal-title" id="option_model_title">Modal title</h5>
+		<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-	  
-	<div class="modal-body p-5">
-	<h3 class = "text-danger" >ARE YOU SURE YOU WANT TO DELETE</h3>
-
-	</div>
-  
+      <div class="modal-body option_date_draw">
+      </div>
       <div class="modal-footer">
-		<button type="submit" class="btn btn-sm btn-outline-danger confirm_delete" data-dismiss="modal">DELETE</button>
-        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal" >Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary option_save">Save changes</button>
       </div>
-	  
     </div>
   </div>
 </div>	
+<!-- Button trigger modal -->
+<!-- Modal 12345-->	
 		
 	
 	
@@ -87,18 +89,26 @@
 <script>
 $(document).ready(function(){ 
 let data_url = `/formsdata`;
+
 // LOAD USER DATA
 load_data = () => {
 let table_body;
-$.post(data_url, { swtch:"getData"  }, 
+$.post(data_url, { swtch:"getSlug", id:"<%-formsdata._id-%>"  }, 
 function(data, status){ 
-$.each(data, function(key, dt) {
-
-});
-$("#data_details").html(table_body);
+if(data.primary_key){ sessionStorage.setItem('primary_key', data.primary_key); }
+if(data.structure){
+Form = JSON.parse(data.structure);
+form_data.refresh();
+displayForm();
+}
 });	
 }
 load_data();
+// LOAD USER DATA ENDINGGG
+
+$('.refresh_form').click(function(event) {
+load_data();
+});
 
 // Table Actions
 $('#data_details').on( 'click','.change_status', function () {
@@ -106,6 +116,20 @@ $.post(data_url, { swtch:'change_status',uid:$(this).data('id'), access:$(this).
 function(data, status){ load_data();
 });	
 });	
+
+//function PushForm(){
+$('.form_save').click(function(event) {
+var data_schema = JSON.stringify(form_data.listForm());
+    var form_id = $('#form_get_id').data('id'); 
+    console.log(form_id);
+	$.post(data_url,{ uid:form_id, data_schema:data_schema, primary_key: (sessionStorage.getItem("primary_key")),swtch:"update_form" }, function(data) {
+	//alert(data); 
+	alert("updated");
+	})
+	.fail(function(response) {
+    alert('Error: ' + response.responseText); 
+	});
+});
 
 
 // form codes 

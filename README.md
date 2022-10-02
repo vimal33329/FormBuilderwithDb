@@ -11,5 +11,7 @@ start development server with : `npm run dev`
 or use node `npm run start`
 
 
-RUN in: **127.0.0.1:3000**
+RUN in: **127.0.0.1:5000**
 or your custom post number based on .env file
+
+

@@ -7,7 +7,8 @@ module.exports = function(){
         description: String,
         status: Boolean,
 		structure:String,
-		data:String
+		data:Array,
+		primary_key:Number
     });
 
     return db.model('formsdata', formsdata);
