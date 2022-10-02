@@ -14,14 +14,14 @@
 	<div class = "col-md-12 p-3 text-center bg-info ">
 	<div class = "row">
 	<strong class = "col-md-12" >CRUD</strong>
-	<button class="col-md-2 btn btn-sm btn-outline-dark " id = "add_task" ><i class="bi bi-clipboard-plus mr-2"></i>ADD</button>
+	<button class="col-md-2 btn btn-sm btn-outline-dark " id = "add_formsdata" ><i class="bi bi-clipboard-plus mr-2"></i>ADD</button>
 	</div>
 	</div>
 		
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Title</th>
+                    <th>Name</th>
                     <th>Descripcion</th>
                     <th>Status</th>
 					<th>Action</th>
@@ -33,25 +33,25 @@
     </div>
     
 	
-<!-- Modal task-->
+<!-- Modal formsdata-->
 <div class="modal fade" id="DataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">TASK</h5>
+        <h5 class="modal-title" id="exampleModalLabel">FORM </h5>
 		<input hidden id = "selected_node" value = "" >
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 <form id = "data_form" >
   <div class="modal-body p-5">
   <div class="form-group">
-    <label for="exampleInputEmail1">Task Name</label>
-    <input type="text" class="form-control" name = "t_task_title" aria-describedby="Task name" placeholder="Title">
+    <label for="exampleInputEmail1">Form Name</label>
+    <input type="text" class="form-control" name = "t_formsdata_name" aria-describedby="Form name" placeholder="Name">
   </div>
   
   <div class="form-group">
-    <label for="exampleInputEmail1">Task Descripcion</label>
-    <textarea  type="text" class="form-control" name = "t_task_description" aria-describedby="Task Descripcion" placeholder="Descripcion"></textarea>
+    <label for="exampleInputEmail1">Form Descripcion</label>
+    <textarea  type="text" class="form-control" name = "t_formsdata_description" aria-describedby="Form Descripcion" placeholder="Descripcion"></textarea>
   </div>  
   
       </div>
@@ -67,7 +67,7 @@
   </div>
 </div>	
 
-<!-- Modal delete task-->
+<!-- Modal delete formsdata-->
 <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog"  aria-hidden="true">
   <div class="modal-dialog border border-danger" role="document">
     <div class="modal-content">
@@ -101,13 +101,16 @@
 <script>
 
 $(document).ready(function(){ 
-let data_url = `/task`;
-let del = '<i style = "color:red;" class="bi bi-trash"></i>';
-let edit = '<i style = "color:green;" class="bi bi-pencil"></i>';
-let icon_t = '<i style = "color:green;" class="bi bi-toggle-on"></i>';
-let icon_f = '<i style = "color:red;" class="bi bi-toggle-off"></i>';
-// LOAD USER DATA
+let data_url = `/formsdata`;
+// Icons 
+let del = '<i class="bi bi-trash text-danger"></i>';
+let edit = '<i class="bi bi-pencil text-success"></i>';
+let design = '<i class="bi bi-easel text-info"></i>';
+let report = '<i class="bi bi-file-ruled text-info"></i>';
+let icon_t = '<i class="bi bi-toggle-on text-success"></i>';
+let icon_f = '<i class="bi bi-toggle-off text-danger"></i>';
 
+// LOAD USER DATA
 load_data = () => {
 let table_body;
 $.post(data_url, { swtch:"getData"  }, 
@@ -115,11 +118,13 @@ function(data, status){
 $.each(data, function(key, dt) {
 let icon = dt.status?icon_t:icon_f;
 table_body += '<tr>';
-table_body += '<td><strong>'+dt.title+'</strong></td>';
+table_body += '<td><strong>'+dt.name+'</strong></td>';
 table_body += '<td>'+dt.description+'</td>';
 table_body += '<td><button data-id = '+dt._id+' data-access = '+dt.status+' class = "btn rud change_status" >'+icon+'</button></td>';
-var action = '<td><button class = "btn btn-sm btn-outline-dark data_edit m-2" data-id = '+dt._id+' data-title = "'+dt.title+'" data-description = "'+dt.description+'" >'+edit+'</button>';
-action += '<button class = "btn btn-sm btn-outline-dark del_task" data-id = '+dt._id+' >'+del+'</button>';
+var action = '<td><button class = "btn btn-sm btn-outline-dark data_edit m-2" data-id = '+dt._id+' data-name = "'+dt.name+'" data-description = "'+dt.description+'" >'+edit+'</button>';
+action += '<button class = "btn btn-sm btn-outline-warning del_formsdata m-2" data-id = '+dt._id+' >'+del+'</button>';
+action += '<a href = "/slug/'+dt._id+'" class = "btn btn-sm btn-outline-primary m-2" data-id = '+dt._id+' >'+design+'</a>';
+action += '<a href = "#" class = "btn btn-sm btn-outline-success m-2" data-id = '+dt._id+' >'+report+'</a>';
 action += '</td>';
 table_body += action;
 table_body += '</tr>';
@@ -131,7 +136,7 @@ load_data();
 
 // Table Actions
 
-$('#add_task').on( 'click', function () {
+$('#add_formsdata').on( 'click', function () {
 $('#data_form')[0].reset();		
 $('.modal-title').html('ADD DATA');
 $('#action').val('addData');
@@ -140,18 +145,18 @@ $('#DataModal').modal('show');
 });
 
 $('#data_details').on( 'click','.data_edit', function () {
-$("input[name='t_task_title']").val($(this).data('title'));
-$("textarea[name='t_task_description']").val($(this).data('description'));
+$("input[name='t_formsdata_title']").val($(this).data('title'));
+$("textarea[name='t_formsdata_description']").val($(this).data('description'));
 $('.modal-title').html('EDIT DATA');
 $('#DataModal').modal('show');
 $('#data_id').val($(this).data('id'));
 $('#action').val('updateData');
 });	
 
-$('#data_details').on( 'click','.del_task', function () {	
+$('#data_details').on( 'click','.del_formsdata', function () {	
 $('#DeleteModal').modal('show');
 $('#data_id').val($(this).data('id'));
-$('#action').val('del_task');
+$('#action').val('del_formsdata');
 });
 
 $('#data_details').on( 'click','.change_status', function () {
@@ -164,8 +169,8 @@ function(data, status){ load_data();
 
 $('._submit_data,.confirm_delete').on( 'click', function () {
 $.post(data_url, { 
-title : $("input[name='t_task_title']").val(), 
-description : $("textarea[name='t_task_description']").val(), 
+name : $("input[name='t_formsdata_name']").val(), 
+description : $("textarea[name='t_formsdata_description']").val(), 
 swtch : $("#action").val(), 
 data_id : $("#data_id").val()  
 }, function(data, status){
